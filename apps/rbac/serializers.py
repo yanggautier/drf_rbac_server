@@ -52,3 +52,25 @@ class CurrentUserInfoSerializer(serializers.ModelSerializer):
                 'read_only': True
             },
         }
+
+
+class RoleSerializer(BaseModelSerializer):
+    class Meta:
+        model = Role
+        exclude = ('is_deleted',)
+        extra_kwargs = {
+            'id': {
+                'read_only': True
+            }
+        }
+
+
+class MenuSerializer(BaseModelSerializer):
+    class Meta:
+        model = Menu
+        exclude = ('is_deleted',)
+        extra_kwargs = {
+            'id': {
+                'read_only': True
+            }
+        }

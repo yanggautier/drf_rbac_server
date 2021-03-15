@@ -29,7 +29,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="权限管理接口文档",
         default_version='v1',
-        description="基于rbac最小模型的权限管理接口文档",
+        description="基于rbac基础模型实现的的权限管理接口文档",
         terms_of_service="https://www.wenbin.org.cn/",
         contact=openapi.Contact(email="1912315910@qq.com"),
         license=openapi.License(name="BSD License"),

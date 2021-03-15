@@ -5,7 +5,7 @@ from utils.base_model import BaseModel
 
 def user_directory_path(instance, filename):
     """
-    自定义用户头像保存路径为：static/media/user_<id>/<filename>
+    自定义用户头像保存路径为：static/media/images/user_<id>/<filename>
     """
     return f'{instance.user.id}/{filename}'
 
@@ -19,7 +19,7 @@ class User(BaseModel, AbstractUser):
     department = models.CharField(max_length=64, blank=True, verbose_name='部门名称', help_text='部门名称')
     position = models.CharField(max_length=64, blank=True, verbose_name='职位名称', help_text='职位名称')
     phone = models.CharField(max_length=11, blank=True, verbose_name='手机号', help_text='手机号')
-    avatar = models.ImageField(upload_to=user_directory_path, blank=True, default='/default/default.jpeg',
+    avatar = models.ImageField(upload_to=user_directory_path, blank=True, default='/images/default/default.jpeg',
                                verbose_name='头像路径', help_text='头像路径')
     roles = models.ManyToManyField(to='Role', related_name='users', verbose_name='角色列表', help_text='角色列表')
 

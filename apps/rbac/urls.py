@@ -4,3 +4,12 @@
 # @File    : urls.py
 # @Software: PyCharm
 # @Description:
+from django.urls import path, include
+from rest_framework import routers
+from .views import UserModelViewSet
+
+router = routers.DefaultRouter()
+router.register(prefix=r'users', viewset=UserModelViewSet)
+urlpatterns = [
+    path('rbac/', include(router.urls))
+]

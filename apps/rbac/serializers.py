@@ -5,8 +5,23 @@
 # @Software: PyCharm
 # @Description:
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 from .models import (User, Role, Menu)
 from utils.base_model_serializer import BaseModelSerializer
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    def validate(self, attrs):
+        """
+        重写validate方法，返回自己手动生成的token
+        :param attrs:
+        :return:
+        """
+        data = super().validate(attrs)
+        data['user_id'] = self.user.id
+        return data
 
 
 class UserSerializer(BaseModelSerializer):
@@ -14,7 +29,7 @@ class UserSerializer(BaseModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('is_deleted', 'first_name', 'last_name', 'email', 'is_staff')
+        exclude = ('first_name', 'last_name', 'email', 'is_staff')
         extra_kwargs = {
             'id': {
                 'read_only': True

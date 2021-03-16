@@ -11,11 +11,13 @@ def user_directory_path(instance, filename):
 
 
 # Create your models here.
-class User(BaseModel, AbstractUser):
+class User(AbstractUser):
     """
     用户表rbac_user模型
     blank=True在字符串类型的字段上表现为空字符串，不是null
     """
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', help_text='创建时间')
+    update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间', help_text='更新时间')
     department = models.CharField(max_length=64, blank=True, verbose_name='部门名称', help_text='部门名称')
     position = models.CharField(max_length=64, blank=True, verbose_name='职位名称', help_text='职位名称')
     phone = models.CharField(max_length=11, blank=True, verbose_name='手机号', help_text='手机号')

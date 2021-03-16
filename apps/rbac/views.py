@@ -1,12 +1,19 @@
 from rest_framework import permissions, status
 from rest_framework.decorators import action
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from utils.custom_model_view_set import CustomModelViewSet
-from .serializers import UserSerializer, CurrentUserInfoSerializer, RoleSerializer, MenuSerializer
+from .serializers import UserSerializer, CurrentUserInfoSerializer, RoleSerializer, MenuSerializer, \
+    MyTokenObtainPairSerializer
 from .models import User, Role, Menu
 from utils.custom_json_response import JsonResponse
 
 
 # Create your views here.
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
 class UserModelViewSet(CustomModelViewSet):
     """
     list:
@@ -30,17 +37,10 @@ class UserModelViewSet(CustomModelViewSet):
     info:
     返回某个用户的简略信息
     """
-    queryset = User.objects.filter(is_deleted=False)
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
     ordering_fields = ('id',)
-
-    def perform_destroy(self, instance):
-        """
-        逻辑删除
-        """
-        instance.is_deleted = True
-        instance.save()
 
     @action(detail=True, methods=['get'])
     def info(self, request, pk=None):

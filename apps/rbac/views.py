@@ -49,7 +49,7 @@ class UserModelViewSet(CustomModelViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return JsonResponse(data=serializer.data, code=1/0, msg='success', status=status.HTTP_200_OK)
+        return JsonResponse(data=serializer.data, code=200, msg='success', status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         """

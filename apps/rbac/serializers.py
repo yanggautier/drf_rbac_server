@@ -21,6 +21,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         """
         data = super().validate(attrs)
         data['user_id'] = self.user.id
+        data['code'] = 200
         return data
 
 
@@ -29,7 +30,7 @@ class UserSerializer(BaseModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('first_name', 'last_name', 'email', 'is_staff')
+        exclude = ('first_name', 'last_name', 'is_staff')
         extra_kwargs = {
             'id': {
                 'read_only': True
@@ -58,6 +59,24 @@ class UserSerializer(BaseModelSerializer):
         representation = super().to_representation(instance)
         representation['roles'] = RoleSerializer(instance.roles, many=True).data
         return representation
+
+    def create(self, validated_data):
+        """
+        创建用户时设置密码为密文
+        """
+        instance = super().create(validated_data)
+        instance.set_password(self.validated_data['password'])
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        """
+        修改用户时设置密码为密文
+        """
+        instance = super().update(instance, validated_data)
+        instance.set_password(self.validated_data['password'])
+        instance.save()
+        return instance
 
 
 class CurrentUserInfoSerializer(serializers.ModelSerializer):

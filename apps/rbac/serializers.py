@@ -21,8 +21,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         """
         data = super().validate(attrs)
         data['user_id'] = self.user.id
-        data['code'] = 200
-        return data
+        return {"code": 200, "message": "success", "data": data}
 
 
 class UserSerializer(BaseModelSerializer):
@@ -83,6 +82,7 @@ class CurrentUserInfoSerializer(serializers.ModelSerializer):
     """
     获取当前登录用户信息序列化器
     """
+
     class Meta:
         model = User
         fields = ('id', 'username', 'avatar', 'roles')

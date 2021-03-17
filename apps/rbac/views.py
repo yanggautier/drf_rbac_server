@@ -1,8 +1,6 @@
 from rest_framework import permissions, status
 from rest_framework.decorators import action
-from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 from utils.custom_model_view_set import CustomModelViewSet
 from .serializers import UserSerializer, CurrentUserInfoSerializer, RoleSerializer, MenuSerializer, \
     MyTokenObtainPairSerializer
@@ -40,7 +38,7 @@ class UserModelViewSet(CustomModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAdminUser,)
     ordering_fields = ('id',)
 
     @action(detail=False)
@@ -50,7 +48,7 @@ class UserModelViewSet(CustomModelViewSet):
         """
         data = User.objects.filter(id=request.user.id)
         serializer = self.get_serializer(data, many=True)
-        return JsonResponse(data=serializer.data, code=200, msg='success')
+        return JsonResponse(data=serializer.data, code=200, msg='success', status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         """
@@ -62,7 +60,7 @@ class UserModelViewSet(CustomModelViewSet):
 class RoleModelViewSet(CustomModelViewSet):
     queryset = Role.objects.filter(is_deleted=False)
     serializer_class = RoleSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAdminUser,)
     ordering_fields = ('id',)
 
     def perform_destroy(self, instance):

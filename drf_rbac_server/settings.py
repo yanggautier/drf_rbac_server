@@ -34,8 +34,6 @@ ALLOWED_HOSTS = ["*"]
 
 # 设置自定义的用户模型类：被Django的认证系统所识别
 AUTH_USER_MODEL = 'rbac.User'
-# 后端配置跨域：允许全部来源的请求
-CORS_ORIGIN_ALLOW_ALL = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,8 +64,8 @@ REST_FRAMEWORK = {
 }
 # djangorestframework-simplejwt配置
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
-    # 将refresh token的有效期改为了10天
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    # 将refresh token的有效期改为了1天
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
 }
@@ -75,15 +73,21 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 配置允许库跨域请求
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 配置允许库跨域请求
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
+
+# 授权进行跨站点HTTP请求的来源列表,默认为空列表
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+]
+# 如果为True,则将允许将cookie包含在跨站点HTTP请求中.默认为False.
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'drf_rbac_server.urls'
 

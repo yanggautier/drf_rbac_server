@@ -80,10 +80,16 @@ class UserSerializer(BaseModelSerializer):
 
 
 class CurrentUserInfoSerializer(serializers.ModelSerializer):
+    """
+    获取当前登录用户信息序列化器
+    """
     class Meta:
         model = User
-        fields = ('username', 'avatar', 'roles')
+        fields = ('id', 'username', 'avatar', 'roles')
         extra_kwargs = {
+            'id': {
+                'read_only': True
+            },
             'username': {
                 'read_only': True
             },
@@ -94,6 +100,14 @@ class CurrentUserInfoSerializer(serializers.ModelSerializer):
                 'read_only': True
             },
         }
+
+    def to_representation(self, instance):
+        """
+        自定义多对多字段列表的返回数据格式
+        """
+        representation = super().to_representation(instance)
+        representation['roles'] = [item.get('role_name') for item in RoleSerializer(instance.roles, many=True).data]
+        return representation
 
 
 class RoleSerializer(BaseModelSerializer):

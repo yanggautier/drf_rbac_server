@@ -1,5 +1,6 @@
 from rest_framework import permissions, status
 from rest_framework.decorators import action
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from utils.custom_model_view_set import CustomModelViewSet
@@ -42,14 +43,14 @@ class UserModelViewSet(CustomModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     ordering_fields = ('id',)
 
-    @action(detail=True, methods=['get'])
-    def info(self, request, pk=None):
+    @action(detail=False)
+    def info(self, request):
         """
         获取某个用户的简略信息,包含id、用户名、头像路径、角色列表
         """
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return JsonResponse(data=serializer.data, code=200, msg='success', status=status.HTTP_200_OK)
+        data = User.objects.filter(id=request.user.id)
+        serializer = self.get_serializer(data, many=True)
+        return JsonResponse(data=serializer.data, code=200, msg='success')
 
     def get_serializer_class(self):
         """
